@@ -1,0 +1,25 @@
+<h3>Find New Restaurant</h3>
+<%= form_tag(new_restaurant_path, method: 'GET') do %>
+  <%= text_field_tag :search, params[:search] %>
+  <%= submit_tag 'Explore', name: nil %>
+<% end %>
+
+<br>
+<br>
+
+<% @search_array.each do |rest|%>
+  <%= form_for @restaurant do |f| %>
+    <%= f.label rest["name"] %>
+    <%= f.hidden_field :name, :value => rest["name"]%>
+    <br>
+    <%= f.label rest["vicinity"] %>
+    <%= f.hidden_field :address, :value => rest["vicinity"] %>
+    <br>
+    <%= f.hidden_field :place_id, :value => rest["place_id"] %>
+    <%= f.hidden_field :lat, :value => rest["geometry"]["location"]["lat"] %>
+    <%= f.hidden_field :lng, :value => rest["geometry"]["location"]["lng"] %>
+    <%= f.submit 'Add Restaurant' %>
+  <% end %>
+    <br>
+    <br>
+<% end  %>

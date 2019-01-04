@@ -1,0 +1,64 @@
+<html>
+<head>
+
+  <title>Google Maps Multiple Markers</title>
+  <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+</head>
+<body>
+<%= form_tag(logout_path) do %>
+  <%= submit_tag 'Logout', name: nil %>
+<% end %>
+<h3>Find New Restaurant</h3>
+<%= form_tag(new_restaurant_path, method: 'GET') do %>
+  <%= text_field_tag :search %>
+  <%= submit_tag 'Explore', name: nil %>
+<% end %>
+<br>
+<br>
+<h3>My Spots</h3>
+<ul>
+<% @restaurants.each do |r| %>
+<li>
+<%= r.name %>
+<br>
+<%= r.address %>
+<br>
+<%= link_to "Delete", r, method: :delete, data: { confirm: "Really?" } %>
+</li>
+<br>
+<% end %>
+</ul>
+
+
+  <div id="map" style="height: 400px; width: 500px;">
+</div>
+<script type="text/javascript">
+    var locations = <%= @restaurant_details_array.to_json.html_safe %>
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 10,
+      center: new google.maps.LatLng(40.763724, -73.976680),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+
+    for (i = 0; i < locations.length; i++) {
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        map: map
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(`<h3 id="firstHeading" class="firstHeading">${locations[i][0]}</h3>`+
+            `<h4>${locations[i][3]}</h4>`);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+    }
+  </script>
+</body>
+</html>
