@@ -8,7 +8,7 @@ class RestaurantsController < ApplicationController
 
   def new
     search_term = params[:search].split(' ').join('%20')
-    search_results = RestClient.get("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=40.763724,-73.976680&radius=45000&name=#{search_term}&key=AIzaSyAElR-1uiHvKq7-fawn4qtE3oYtpq_3Psw")
+    search_results = RestClient.get("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=40.763724,-73.976680&radius=45000&name=#{search_term}&key={my-Key")
 
     @search_array = JSON.parse(search_results)["results"][0..2]
     # byebug
